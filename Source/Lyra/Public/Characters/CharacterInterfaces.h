@@ -25,6 +25,9 @@ class LYRA_API ICharacterInterface
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	EGuns GetEquippedGunType() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	FVector2D GetCharacterHorizontalVelocity() const;
 };

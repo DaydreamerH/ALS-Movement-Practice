@@ -9,10 +9,16 @@ void ULyraAnimInstance::NativeInitializeAnimation()
 {
 	Super::NativeInitializeAnimation();
 	
+	PawnOwner = TryGetPawnOwner();
 }
 
 void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
-	
+
+	PawnOwner = PawnOwner == nullptr ? TryGetPawnOwner() : PawnOwner;
+	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
+	{
+		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
+	}
 }

@@ -6,6 +6,7 @@
 #include "Animation/AnimInstance.h"
 #include "LyraAnimInstance.generated.h"
 
+class ICharacterInterface;
 enum class EGuns : uint8;
 class ALyraCharacter;
 /**
@@ -22,6 +23,14 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 private:
+	UPROPERTY()
+	APawn* PawnOwner = nullptr;
+
+	
+	/** 角色信息 **/
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	FVector2D HorizontalVelocity = FVector2D::ZeroVector;
+	
 
 	
 };

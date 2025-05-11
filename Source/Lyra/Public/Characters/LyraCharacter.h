@@ -3,6 +3,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterInterfaces.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "LyraCharacter.generated.h"
 
@@ -31,9 +32,22 @@ public:
 	class UInputMappingContext* DefaultMappingContext;
 
 	UPROPERTY(EditAnywhere, Category="Input")
-	class UInputAction* SwitchWeaponsActions;
+	class UInputAction* SwitchWeaponsAction;
 	UFUNCTION()
 	void OnAction_SwitchWeapons(const FInputActionValue& InputActionValue);
+	
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* LookAction;
+	UFUNCTION()
+	void OnAction_Look(const FInputActionValue& InputActionValue);
+
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* MoveAction;
+	UFUNCTION()
+	void OnAction_Move(const FInputActionValue& InputActionValue);
+
+
+
 	
 	/** Anim Layers **/
 	UPROPERTY(EditAnywhere)
@@ -60,6 +74,6 @@ private:
 
 public:
 	virtual EGuns GetEquippedGunType_Implementation() const override;
-
+	virtual FVector2D GetCharacterHorizontalVelocity_Implementation() const override;
 	
 };

@@ -46,6 +46,12 @@ public:
 	UFUNCTION()
 	void OnAction_Move(const FInputActionValue& InputActionValue);
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* AimAction;
+	UFUNCTION()
+	void OnAction_StartAim(const FInputActionValue& InputActionValue);
+	UFUNCTION()
+	void OnAction_EndAim(const FInputActionValue& InputActionValue);
 
 
 	
@@ -71,9 +77,17 @@ private:
 	APlayerController* LyraPlayerController;
 	
 	EGuns EquippedGunType = EGuns::EG_Unarmed;
+	
+	ECharacterGate CurrentGate = ECharacterGate::ECG_Jogging;
+	FGateSettings WalkingGateSettings;
+	FGateSettings JoggingGateSettings;
+	void UpdateGate(ECharacterGate Gate);
+	
 
 public:
 	virtual EGuns GetEquippedGunType_Implementation() const override;
 	virtual FVector2D GetCharacterHorizontalVelocity_Implementation() const override;
-	
+	virtual ECharacterGate GetCharacterCurrentGate_Implementation() const override;
+	virtual FRotator GetCharacterRotation_Implementation() const override;
+	virtual float GetCharacterOrientationData_Implementation() const override;
 };

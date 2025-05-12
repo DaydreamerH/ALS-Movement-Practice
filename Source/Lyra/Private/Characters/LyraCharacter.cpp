@@ -7,8 +7,11 @@
 #include "GameFramework/PlayerController.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "KismetAnimationLibrary.h"
 #include "Camera/CameraComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 ALyraCharacter::ALyraCharacter()
 {
@@ -20,15 +23,28 @@ ALyraCharacter::ALyraCharacter()
 
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom);
+
+	JoggingGateSettings.MaxWalkSpeed = 800.f;
+	JoggingGateSettings.MaxAcceleration = 800.f;
+	JoggingGateSettings.BrakingDeceleration = 1200.f;
+	JoggingGateSettings.BrakingFrictionFactor = 1.f;
+	JoggingGateSettings.BrakingFriction = 0.f;
+	JoggingGateSettings.UseSeparateBrakingFriction = true;
+
+	WalkingGateSettings.MaxWalkSpeed = 250.f;
+	WalkingGateSettings.MaxAcceleration = 250.f;
+	WalkingGateSettings.BrakingDeceleration = 250.f;
+	WalkingGateSettings.BrakingFrictionFactor = 1.f;
+	WalkingGateSettings.UseSeparateBrakingFriction = true;
 }
 
 void ALyraCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if(GetMesh() && AnimLayers)
+	if(GetMesh() && AnimUnarmed)
 	{
-		GetMesh()->LinkAnimClassLayers(AnimLayers);
+		GetMesh()->LinkAnimClassLayers(AnimUnarmed);
 	}
 	
 }
@@ -76,6 +92,11 @@ void ALyraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		if(MoveAction)
 		{
 			EnhancedInput->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::OnAction_Move);
+		}
+		if(AimAction)
+		{
+			EnhancedInput->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::OnAction_StartAim);
+			EnhancedInput->BindAction(AimAction, ETriggerEvent::Completed, this, &ThisClass::OnAction_EndAim);
 		}
 	}
 }
@@ -127,14 +148,48 @@ void ALyraCharacter::OnAction_Move(const FInputActionValue& InputActionValue)
 	}
 }
 
+void ALyraCharacter::OnAction_StartAim(const FInputActionValue& InputActionValue)
+{
+	UpdateGate(ECharacterGate::ECG_Walking);
+}
+
+void ALyraCharacter::OnAction_EndAim(const FInputActionValue& InputActionValue)
+{
+	UpdateGate(ECharacterGate::ECG_Jogging);
+}
 
 
-
-
-
-
-
-
+/** 状态更新 **/
+void ALyraCharacter::UpdateGate(ECharacterGate Gate)
+{
+	CurrentGate = Gate;
+	switch (CurrentGate)
+	{
+	case ECharacterGate::ECG_Jogging:
+		if(GetCharacterMovement())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = JoggingGateSettings.MaxWalkSpeed;
+			GetCharacterMovement()->MaxAcceleration = JoggingGateSettings.MaxAcceleration;
+			GetCharacterMovement()->BrakingDecelerationWalking = JoggingGateSettings.BrakingDeceleration;
+			GetCharacterMovement()->BrakingFriction = JoggingGateSettings.BrakingFriction;
+			GetCharacterMovement()->bUseSeparateBrakingFriction = JoggingGateSettings.UseSeparateBrakingFriction;
+		}
+		break;
+	case ECharacterGate::ECG_Walking:
+		if(GetCharacterMovement())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = WalkingGateSettings.MaxWalkSpeed;
+			GetCharacterMovement()->MaxAcceleration = WalkingGateSettings.MaxAcceleration;
+			GetCharacterMovement()->BrakingDecelerationWalking = WalkingGateSettings.BrakingDeceleration;
+			GetCharacterMovement()->BrakingFriction = WalkingGateSettings.BrakingFriction;
+			GetCharacterMovement()->bUseSeparateBrakingFriction = WalkingGateSettings.UseSeparateBrakingFriction;
+		}
+		break;
+	default:
+		break;	
+	}
+	
+}
 
 
 /** 接口实现 **/
@@ -148,4 +203,22 @@ FVector2D ALyraCharacter::GetCharacterHorizontalVelocity_Implementation() const
 	const FVector2D HorizontalVelocity = {GetVelocity().X, GetVelocity().Y};
 	return HorizontalVelocity;
 }
+
+ECharacterGate ALyraCharacter::GetCharacterCurrentGate_Implementation() const
+{
+	return CurrentGate;
+}
+
+FRotator ALyraCharacter::GetCharacterRotation_Implementation() const
+{
+	return GetActorRotation();
+}
+
+float ALyraCharacter::GetCharacterOrientationData_Implementation() const
+{
+	return UKismetAnimationLibrary::CalculateDirection(GetVelocity(), GetActorRotation());
+}
+
+
+
 

@@ -14,6 +14,39 @@ enum class EGuns : uint8
 	EG_MAX UMETA(DisplayName="DefaultMax")
 };
 
+UENUM(BlueprintType)
+enum class ECharacterGate : uint8
+{
+	ECG_Walking UMETA(DisplayName="Walking"),
+	ECG_Jogging UMETA(DisplayName="Jogging"),
+
+	ECG_MAX UMETA(DisplayName="DefaultMax")
+};
+
+USTRUCT(BlueprintType)
+struct FGateSettings
+{
+	GENERATED_BODY()
+
+	float MaxWalkSpeed;
+	float MaxAcceleration;
+	float BrakingDeceleration;
+	float BrakingFrictionFactor;
+	float BrakingFriction;
+	bool UseSeparateBrakingFriction;
+};
+
+UENUM(BlueprintType)
+enum class ELocomotionDirection : uint8
+{
+	ELD_Forward UMETA(DisplayName="Forward"),
+	ELD_Backward UMETA(DisplayName="Backward"),
+	ELD_Left UMETA(DisplayName="Left"),
+	ELD_Right UMETA(DisplayName="Right")
+};
+
+
+
 UINTERFACE(Blueprintable)
 class LYRA_API UCharacterInterface : public UInterface
 {
@@ -30,4 +63,13 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	FVector2D GetCharacterHorizontalVelocity() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	ECharacterGate GetCharacterCurrentGate() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	FRotator GetCharacterRotation() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	float GetCharacterOrientationData() const;
 };

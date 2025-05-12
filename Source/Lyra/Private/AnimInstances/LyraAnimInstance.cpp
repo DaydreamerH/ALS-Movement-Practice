@@ -20,5 +20,30 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
 	{
 		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
+		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
+		VelocityLocomotionAngle = ICharacterInterface::Execute_GetCharacterOrientationData(PawnOwner);
+		UpdateVelocityLocomotionDirection();
+	}
+}
+
+
+
+void ULyraAnimInstance::UpdateVelocityLocomotionDirection()
+{
+	if(VelocityLocomotionAngle>=BackwardMinBound || VelocityLocomotionAngle<=BackwardMaxBound)
+	{
+		VelocityLocomotionDirection = ELocomotionDirection::ELD_Backward;
+	}
+	else if(VelocityLocomotionAngle>=ForwardMinBound && VelocityLocomotionAngle<=ForwardMaxBound)
+	{
+		VelocityLocomotionDirection = ELocomotionDirection::ELD_Forward;
+	}
+	else if(VelocityLocomotionAngle>0.f)
+	{
+		VelocityLocomotionDirection = ELocomotionDirection::ELD_Right;
+	}
+	else
+	{
+		VelocityLocomotionDirection = ELocomotionDirection::ELD_Left;
 	}
 }

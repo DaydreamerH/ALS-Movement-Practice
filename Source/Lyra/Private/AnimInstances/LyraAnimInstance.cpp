@@ -23,7 +23,10 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
 		VelocityLocomotionAngle = ICharacterInterface::Execute_GetCharacterOrientationData(PawnOwner);
 		UpdateVelocityLocomotionDirection();
-		
+
+		LastCharacterYaw = CurrentCharacterYaw;
+		CurrentCharacterYaw = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner).Yaw;
+		CalculateLeanAngle(DeltaSeconds);
 	}
 }
 
@@ -64,4 +67,14 @@ void ULyraAnimInstance::UpdateVelocityLocomotionDirection()
 	{
 		VelocityLocomotionDirection = ELocomotionDirection::ELD_Left;
 	}
+}
+
+void ULyraAnimInstance::CalculateLeanAngle(float DeltaSeconds)
+{
+	float DeltaYaw = CurrentCharacterYaw - LastCharacterYaw;
+	if(VelocityLocomotionDirection == ELocomotionDirection::ELD_Backward)
+	{
+		DeltaYaw *= -1;
+	}
+	LeanAngle = FMath::Clamp(DeltaYaw / DeltaSeconds / 5.f, -90.f, 90.f);
 }

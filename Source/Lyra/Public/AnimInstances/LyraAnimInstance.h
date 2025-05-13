@@ -35,6 +35,7 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ECharacterGate CharacterCurrentGate;
 	
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float VelocityLocomotionAngle = 0.f;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ELocomotionDirection VelocityLocomotionDirection;
@@ -44,4 +45,10 @@ private:
 	const float BackwardMinBound = -130.f;
 	const float BackwardMaxBound = 130.f;
 	const float DeadZone = 20.f;
+
+	float LastCharacterYaw = 0.f;
+	float CurrentCharacterYaw = 0.f;
+	void CalculateLeanAngle(float DeltaSeconds);
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float LeanAngle = 0.f;
 };

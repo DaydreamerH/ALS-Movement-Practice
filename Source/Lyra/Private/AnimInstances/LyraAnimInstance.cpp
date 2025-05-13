@@ -23,6 +23,7 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
 		VelocityLocomotionAngle = ICharacterInterface::Execute_GetCharacterOrientationData(PawnOwner);
 		UpdateVelocityLocomotionDirection();
+		
 	}
 }
 
@@ -30,7 +31,24 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 void ULyraAnimInstance::UpdateVelocityLocomotionDirection()
 {
-	if(VelocityLocomotionAngle>=BackwardMinBound || VelocityLocomotionAngle<=BackwardMaxBound)
+	switch (VelocityLocomotionDirection)
+	{
+	case ELocomotionDirection::ELD_Forward:
+		if(VelocityLocomotionAngle>=ForwardMinBound-DeadZone && VelocityLocomotionAngle<=ForwardMaxBound+DeadZone)return;
+		break;
+	case ELocomotionDirection::ELD_Backward:
+		if(VelocityLocomotionAngle<=BackwardMinBound+DeadZone || VelocityLocomotionAngle>=BackwardMaxBound-DeadZone)return;
+		break;
+	case ELocomotionDirection::ELD_Right:
+		if(VelocityLocomotionAngle<=BackwardMaxBound+DeadZone && VelocityLocomotionAngle>=ForwardMaxBound-DeadZone)return;
+		break;
+	case ELocomotionDirection::ELD_Left:
+		if(VelocityLocomotionAngle>=BackwardMinBound-DeadZone && VelocityLocomotionAngle<=ForwardMinBound-DeadZone)return;
+		break;
+	default:
+		break;	
+	}
+	if(VelocityLocomotionAngle<=BackwardMinBound || VelocityLocomotionAngle>=BackwardMaxBound)
 	{
 		VelocityLocomotionDirection = ELocomotionDirection::ELD_Backward;
 	}

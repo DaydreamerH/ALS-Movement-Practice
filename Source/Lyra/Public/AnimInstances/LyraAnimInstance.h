@@ -43,5 +43,5 @@ private:
 	const float ForwardMaxBound = 50.f;
 	const float BackwardMinBound = -130.f;
 	const float BackwardMaxBound = 130.f;
-	const float DeadZone = 10.f;
+	const float DeadZone = 20.f;
 };

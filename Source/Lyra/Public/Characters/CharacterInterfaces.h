@@ -81,4 +81,10 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	float PredictCharacterStopDistance() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	float GetCharacterMaxWalkSpeed() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	FVector GetCharacterLocation() const;
 };

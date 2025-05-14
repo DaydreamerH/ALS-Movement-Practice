@@ -34,11 +34,15 @@ private:
 	
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ECharacterGate CharacterCurrentGate;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	ECharacterGate CharacterLastGate;
 	
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float VelocityLocomotionAngle = 0.f;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ELocomotionDirection VelocityLocomotionDirection;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	ELocomotionDirection LastVelocityLocomotionDirection;
 	void UpdateVelocityLocomotionDirection();
 	const float ForwardMinBound = -50.f;
 	const float ForwardMaxBound = 50.f;
@@ -58,4 +62,14 @@ private:
 	void GetCharacterStopDistance();
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float StopDistance = 0.f;
+
+	void GetCharacterMaxWalkSpeed();
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float CharacterMaxWalkSpeed = 0.f;
+
+	FVector CharacterCurrentLocation = FVector::ZeroVector;
+	FVector CharacterLastLocation = FVector::ZeroVector;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float CharacterDeltaLocation;
+	void CalculateDeltaLocation();
 };

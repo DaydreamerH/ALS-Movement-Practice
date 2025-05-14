@@ -24,9 +24,9 @@ ALyraCharacter::ALyraCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom);
 
-	JoggingGateSettings.MaxWalkSpeed = 800.f;
-	JoggingGateSettings.MaxAcceleration = 800.f;
-	JoggingGateSettings.BrakingDeceleration = 1200.f;
+	JoggingGateSettings.MaxWalkSpeed = 500.f;
+	JoggingGateSettings.MaxAcceleration = 500.f;
+	JoggingGateSettings.BrakingDeceleration = 500.f;
 	JoggingGateSettings.BrakingFrictionFactor = 1.f;
 	JoggingGateSettings.BrakingFriction = 0.f;
 	JoggingGateSettings.UseSeparateBrakingFriction = true;
@@ -245,6 +245,16 @@ float ALyraCharacter::PredictCharacterStopDistance_Implementation() const
 		);
 	
 	return StopLocation.Size();
+}
+
+float ALyraCharacter::GetCharacterMaxWalkSpeed_Implementation() const
+{
+	return GetCharacterMovement()->MaxWalkSpeed;
+}
+
+FVector ALyraCharacter::GetCharacterLocation_Implementation() const
+{
+	return GetActorLocation();
 }
 
 

@@ -93,4 +93,6 @@ public:
 	virtual FVector GetCharacterHorizontalAcceleration_Implementation() const override;
 	virtual bool IsCharacterAccelerating_Implementation() const override;
 	virtual float PredictCharacterStopDistance_Implementation() const override;
+	virtual float GetCharacterMaxWalkSpeed_Implementation() const override;
+	virtual FVector GetCharacterLocation_Implementation() const override;
 };

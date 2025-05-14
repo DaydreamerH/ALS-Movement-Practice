@@ -20,8 +20,12 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
 	{
 		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
+		CharacterLastGate = CharacterCurrentGate;
 		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
+		
+		
 		VelocityLocomotionAngle = ICharacterInterface::Execute_GetCharacterOrientationData(PawnOwner);
+		LastVelocityLocomotionDirection = VelocityLocomotionDirection;
 		UpdateVelocityLocomotionDirection();
 
 		LastCharacterYaw = CurrentCharacterYaw;
@@ -29,10 +33,14 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CalculateLeanAngle(DeltaSeconds);
 
 		bIsCharacterAccelerating = ICharacterInterface::Execute_IsCharacterAccelerating(PawnOwner);
-
 		
 		GetCharacterStopDistance();
-		UE_LOG(LogTemp, Log, TEXT("%f"), StopDistance);
+
+		GetCharacterMaxWalkSpeed();
+
+		CharacterLastLocation = CharacterCurrentLocation;
+		CharacterCurrentLocation = ICharacterInterface::Execute_GetCharacterLocation(PawnOwner);
+		CalculateDeltaLocation();
 	}
 }
 
@@ -92,4 +100,20 @@ void ULyraAnimInstance::GetCharacterStopDistance()
 	{
 		StopDistance = ICharacterInterface::Execute_PredictCharacterStopDistance(PawnOwner);
 	}
+}
+
+void ULyraAnimInstance::GetCharacterMaxWalkSpeed()
+{
+	PawnOwner = PawnOwner == nullptr ? TryGetPawnOwner() : PawnOwner;
+	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
+	{
+		CharacterMaxWalkSpeed = ICharacterInterface::Execute_GetCharacterMaxWalkSpeed(PawnOwner);
+	}
+}
+
+void ULyraAnimInstance::CalculateDeltaLocation()
+{
+	FVector DeltaLocation = CharacterCurrentLocation - CharacterLastLocation;
+	DeltaLocation.Z = 0.f;
+	CharacterDeltaLocation = DeltaLocation.Size();
 }

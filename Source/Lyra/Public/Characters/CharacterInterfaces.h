@@ -72,4 +72,13 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	float GetCharacterOrientationData() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	FVector GetCharacterHorizontalAcceleration() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	bool IsCharacterAccelerating() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	float PredictCharacterStopDistance() const;
 };

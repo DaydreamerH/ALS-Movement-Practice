@@ -44,11 +44,18 @@ private:
 	const float ForwardMaxBound = 50.f;
 	const float BackwardMinBound = -130.f;
 	const float BackwardMaxBound = 130.f;
-	const float DeadZone = 20.f;
+	const float DeadZone = 10.f;
 
 	float LastCharacterYaw = 0.f;
 	float CurrentCharacterYaw = 0.f;
 	void CalculateLeanAngle(float DeltaSeconds);
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float LeanAngle = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsCharacterAccelerating = false;
+
+	void GetCharacterStopDistance();
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float StopDistance = 0.f;
 };

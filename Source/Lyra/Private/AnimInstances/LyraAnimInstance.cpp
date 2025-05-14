@@ -27,6 +27,12 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		LastCharacterYaw = CurrentCharacterYaw;
 		CurrentCharacterYaw = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner).Yaw;
 		CalculateLeanAngle(DeltaSeconds);
+
+		bIsCharacterAccelerating = ICharacterInterface::Execute_IsCharacterAccelerating(PawnOwner);
+
+		
+		GetCharacterStopDistance();
+		UE_LOG(LogTemp, Log, TEXT("%f"), StopDistance);
 	}
 }
 
@@ -77,4 +83,13 @@ void ULyraAnimInstance::CalculateLeanAngle(float DeltaSeconds)
 		DeltaYaw *= -1;
 	}
 	LeanAngle = FMath::Clamp(DeltaYaw / DeltaSeconds / 5.f, -90.f, 90.f);
+}
+
+void ULyraAnimInstance::GetCharacterStopDistance()
+{
+	PawnOwner = PawnOwner == nullptr ? TryGetPawnOwner() : PawnOwner;
+	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
+	{
+		StopDistance = ICharacterInterface::Execute_PredictCharacterStopDistance(PawnOwner);
+	}
 }

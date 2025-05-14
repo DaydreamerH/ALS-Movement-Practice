@@ -11,7 +11,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
-#include "Kismet/KismetMathLibrary.h"
+#include "AnimCharacterMovementLibrary.h"
 
 ALyraCharacter::ALyraCharacter()
 {
@@ -46,6 +46,7 @@ void ALyraCharacter::BeginPlay()
 	{
 		GetMesh()->LinkAnimClassLayers(AnimUnarmed);
 	}
+	UpdateGate(ECharacterGate::ECG_Jogging);
 	
 }
 
@@ -217,6 +218,33 @@ FRotator ALyraCharacter::GetCharacterRotation_Implementation() const
 float ALyraCharacter::GetCharacterOrientationData_Implementation() const
 {
 	return UKismetAnimationLibrary::CalculateDirection(GetVelocity(), GetActorRotation());
+}
+
+FVector ALyraCharacter::GetCharacterHorizontalAcceleration_Implementation() const
+{
+	FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
+	return {Acceleration.X, Acceleration.Y, 0.f};
+}
+
+bool ALyraCharacter::IsCharacterAccelerating_Implementation() const
+{
+	const FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
+	const FVector2D HorizontalAcceleration = {Acceleration.X, Acceleration.Y};
+	return !HorizontalAcceleration.IsNearlyZero();
+}
+
+float ALyraCharacter::PredictCharacterStopDistance_Implementation() const
+{
+	const FVector StopLocation = UAnimCharacterMovementLibrary::PredictGroundMovementStopLocation(
+		{GetVelocity().X, GetVelocity().Y, 0.f},
+		GetCharacterMovement()->bUseSeparateBrakingFriction,
+		GetCharacterMovement()->BrakingFriction,
+		GetCharacterMovement()->GroundFriction,
+		GetCharacterMovement()->BrakingFrictionFactor,
+		GetCharacterMovement()->BrakingDecelerationWalking
+		);
+	
+	return StopLocation.Size();
 }
 
 

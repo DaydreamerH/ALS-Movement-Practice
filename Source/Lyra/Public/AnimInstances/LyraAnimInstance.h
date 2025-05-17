@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "Characters/CharacterInterfaces.h"
 #include "LyraAnimInstance.generated.h"
 
 enum class ELocomotionDirection : uint8;
@@ -40,10 +41,10 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float VelocityLocomotionAngle = 0.f;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
-	ELocomotionDirection VelocityLocomotionDirection;
+	ELocomotionDirection VelocityLocomotionDirection = ELocomotionDirection::ELD_Forward;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ELocomotionDirection LastVelocityLocomotionDirection;
-	void UpdateVelocityLocomotionDirection();
+	void UpdateLocomotionDirection(float Angle, ELocomotionDirection& Direction);
 	const float ForwardMinBound = -50.f;
 	const float ForwardMaxBound = 50.f;
 	const float BackwardMinBound = -130.f;
@@ -72,4 +73,18 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float CharacterDeltaLocation;
 	void CalculateDeltaLocation();
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	FVector2D HorizontalAcceleration = FVector2D::ZeroVector;
+
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	FVector2D PivotHorizontalAcceleration = FVector2D::ZeroVector;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	ELocomotionDirection AccelerationLocomotionDirection = ELocomotionDirection::ELD_Forward;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float AccelerationLocomotionAngle = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float PivotDistance = 0.f;
+	void GetCharacterPivotDistance();
 };

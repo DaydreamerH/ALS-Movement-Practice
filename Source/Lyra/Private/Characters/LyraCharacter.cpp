@@ -24,9 +24,9 @@ ALyraCharacter::ALyraCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom);
 
-	JoggingGateSettings.MaxWalkSpeed = 500.f;
-	JoggingGateSettings.MaxAcceleration = 500.f;
-	JoggingGateSettings.BrakingDeceleration = 500.f;
+	JoggingGateSettings.MaxWalkSpeed = 800.f;
+	JoggingGateSettings.MaxAcceleration = 800.f;
+	JoggingGateSettings.BrakingDeceleration = 1200.f;
 	JoggingGateSettings.BrakingFrictionFactor = 1.f;
 	JoggingGateSettings.BrakingFriction = 0.f;
 	JoggingGateSettings.UseSeparateBrakingFriction = true;
@@ -220,10 +220,10 @@ float ALyraCharacter::GetCharacterOrientationData_Implementation() const
 	return UKismetAnimationLibrary::CalculateDirection(GetVelocity(), GetActorRotation());
 }
 
-FVector ALyraCharacter::GetCharacterHorizontalAcceleration_Implementation() const
+FVector2D ALyraCharacter::GetCharacterHorizontalAcceleration_Implementation() const
 {
 	FVector Acceleration = GetCharacterMovement()->GetCurrentAcceleration();
-	return {Acceleration.X, Acceleration.Y, 0.f};
+	return {Acceleration.X, Acceleration.Y};
 }
 
 bool ALyraCharacter::IsCharacterAccelerating_Implementation() const
@@ -255,6 +255,17 @@ float ALyraCharacter::GetCharacterMaxWalkSpeed_Implementation() const
 FVector ALyraCharacter::GetCharacterLocation_Implementation() const
 {
 	return GetActorLocation();
+}
+
+float ALyraCharacter::PredictCharacterPivotDistance_Implementation() const
+{
+	const FVector PivotLocation = UAnimCharacterMovementLibrary::PredictGroundMovementPivotLocation(
+		GetCharacterMovement()->GetCurrentAcceleration(),
+		{GetVelocity().X, GetVelocity().Y, 0.f},
+		GetCharacterMovement()->GroundFriction
+	);
+	
+	return PivotLocation.Size();
 }
 
 

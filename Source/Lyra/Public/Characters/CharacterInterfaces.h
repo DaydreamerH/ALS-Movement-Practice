@@ -74,7 +74,7 @@ public:
 	float GetCharacterOrientationData() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
-	FVector GetCharacterHorizontalAcceleration() const;
+	FVector2D GetCharacterHorizontalAcceleration() const;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	bool IsCharacterAccelerating() const;
@@ -87,4 +87,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	FVector GetCharacterLocation() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
+	float PredictCharacterPivotDistance() const;
 };

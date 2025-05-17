@@ -90,9 +90,10 @@ public:
 	virtual ECharacterGate GetCharacterCurrentGate_Implementation() const override;
 	virtual FRotator GetCharacterRotation_Implementation() const override;
 	virtual float GetCharacterOrientationData_Implementation() const override;
-	virtual FVector GetCharacterHorizontalAcceleration_Implementation() const override;
+	virtual FVector2D GetCharacterHorizontalAcceleration_Implementation() const override;
 	virtual bool IsCharacterAccelerating_Implementation() const override;
 	virtual float PredictCharacterStopDistance_Implementation() const override;
 	virtual float GetCharacterMaxWalkSpeed_Implementation() const override;
 	virtual FVector GetCharacterLocation_Implementation() const override;
+	virtual float PredictCharacterPivotDistance_Implementation() const override;
 };

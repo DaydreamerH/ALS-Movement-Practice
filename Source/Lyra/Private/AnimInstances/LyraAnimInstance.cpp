@@ -3,6 +3,7 @@
 
 #include "AnimInstances/LyraAnimInstance.h"
 
+#include "KismetAnimationLibrary.h"
 #include "Characters/LyraCharacter.h"
 
 void ULyraAnimInstance::NativeInitializeAnimation()
@@ -19,17 +20,19 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	PawnOwner = PawnOwner == nullptr ? TryGetPawnOwner() : PawnOwner;
 	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
 	{
+		FRotator CharacterRotation = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner);
+		
 		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
 		CharacterLastGate = CharacterCurrentGate;
 		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
 		
 		
-		VelocityLocomotionAngle = ICharacterInterface::Execute_GetCharacterOrientationData(PawnOwner);
+		VelocityLocomotionAngle = UKismetAnimationLibrary::CalculateDirection({HorizontalVelocity.X, HorizontalVelocity.Y,0.f}, CharacterRotation);
 		LastVelocityLocomotionDirection = VelocityLocomotionDirection;
-		UpdateVelocityLocomotionDirection();
+		UpdateLocomotionDirection(VelocityLocomotionAngle, VelocityLocomotionDirection);
 
 		LastCharacterYaw = CurrentCharacterYaw;
-		CurrentCharacterYaw = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner).Yaw;
+		CurrentCharacterYaw = CharacterRotation.Yaw;
 		CalculateLeanAngle(DeltaSeconds);
 
 		bIsCharacterAccelerating = ICharacterInterface::Execute_IsCharacterAccelerating(PawnOwner);
@@ -41,45 +44,49 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CharacterLastLocation = CharacterCurrentLocation;
 		CharacterCurrentLocation = ICharacterInterface::Execute_GetCharacterLocation(PawnOwner);
 		CalculateDeltaLocation();
+
+		HorizontalAcceleration = ICharacterInterface::Execute_GetCharacterHorizontalAcceleration(PawnOwner);
+		AccelerationLocomotionAngle = UKismetAnimationLibrary::CalculateDirection({HorizontalAcceleration.X, HorizontalAcceleration.Y,0.f}, CharacterRotation);
+		UpdateLocomotionDirection(AccelerationLocomotionAngle, AccelerationLocomotionDirection);
+
+		GetCharacterPivotDistance();
 	}
 }
 
-
-
-void ULyraAnimInstance::UpdateVelocityLocomotionDirection()
+void ULyraAnimInstance::UpdateLocomotionDirection(const float Angle, ELocomotionDirection& Direction)
 {
-	switch (VelocityLocomotionDirection)
+	switch (Direction)
 	{
 	case ELocomotionDirection::ELD_Forward:
-		if(VelocityLocomotionAngle>=ForwardMinBound-DeadZone && VelocityLocomotionAngle<=ForwardMaxBound+DeadZone)return;
+		if(Angle>=ForwardMinBound-DeadZone && Angle<=ForwardMaxBound+DeadZone)return;
 		break;
 	case ELocomotionDirection::ELD_Backward:
-		if(VelocityLocomotionAngle<=BackwardMinBound+DeadZone || VelocityLocomotionAngle>=BackwardMaxBound-DeadZone)return;
+		if(Angle<=BackwardMinBound+DeadZone || Angle>=BackwardMaxBound-DeadZone)return;
 		break;
 	case ELocomotionDirection::ELD_Right:
-		if(VelocityLocomotionAngle<=BackwardMaxBound+DeadZone && VelocityLocomotionAngle>=ForwardMaxBound-DeadZone)return;
+		if(Angle<=BackwardMaxBound+DeadZone && Angle>=ForwardMaxBound-DeadZone)return;
 		break;
 	case ELocomotionDirection::ELD_Left:
-		if(VelocityLocomotionAngle>=BackwardMinBound-DeadZone && VelocityLocomotionAngle<=ForwardMinBound-DeadZone)return;
+		if(Angle>=BackwardMinBound-DeadZone && Angle<=ForwardMinBound-DeadZone)return;
 		break;
 	default:
 		break;	
 	}
-	if(VelocityLocomotionAngle<=BackwardMinBound || VelocityLocomotionAngle>=BackwardMaxBound)
+	if(Angle<=BackwardMinBound || Angle>=BackwardMaxBound)
 	{
-		VelocityLocomotionDirection = ELocomotionDirection::ELD_Backward;
+		Direction = ELocomotionDirection::ELD_Backward;
 	}
-	else if(VelocityLocomotionAngle>=ForwardMinBound && VelocityLocomotionAngle<=ForwardMaxBound)
+	else if(Angle>=ForwardMinBound && Angle<=ForwardMaxBound)
 	{
-		VelocityLocomotionDirection = ELocomotionDirection::ELD_Forward;
+		Direction = ELocomotionDirection::ELD_Forward;
 	}
-	else if(VelocityLocomotionAngle>0.f)
+	else if(Angle>0.f)
 	{
-		VelocityLocomotionDirection = ELocomotionDirection::ELD_Right;
+		Direction = ELocomotionDirection::ELD_Right;
 	}
 	else
 	{
-		VelocityLocomotionDirection = ELocomotionDirection::ELD_Left;
+		Direction = ELocomotionDirection::ELD_Left;
 	}
 }
 
@@ -116,4 +123,13 @@ void ULyraAnimInstance::CalculateDeltaLocation()
 	FVector DeltaLocation = CharacterCurrentLocation - CharacterLastLocation;
 	DeltaLocation.Z = 0.f;
 	CharacterDeltaLocation = DeltaLocation.Size();
+}
+
+void ULyraAnimInstance::GetCharacterPivotDistance()
+{
+	PawnOwner = PawnOwner == nullptr ? TryGetPawnOwner() : PawnOwner;
+	if(PawnOwner && PawnOwner->Implements<UCharacterInterface>())
+	{
+		PivotDistance = ICharacterInterface::Execute_PredictCharacterPivotDistance(PawnOwner);
+	}
 }

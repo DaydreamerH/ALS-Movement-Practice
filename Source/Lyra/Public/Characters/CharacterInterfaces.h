@@ -45,7 +45,13 @@ enum class ELocomotionDirection : uint8
 	ELD_Right UMETA(DisplayName="Right")
 };
 
-
+UENUM(BlueprintType)
+enum class ERootYawOffsetMode :uint8
+{
+	ERYOM_Accumulate UMETA(DisplayName="Accumulate"),
+	ERYOM_BlendOut UMETA(DisplayName="BlendOut"),
+	ERYOM_Hold UMETA(DisplayName="Hold")
+};
 
 UINTERFACE(Blueprintable)
 class LYRA_API UCharacterInterface : public UInterface

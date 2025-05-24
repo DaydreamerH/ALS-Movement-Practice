@@ -50,6 +50,8 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		UpdateLocomotionDirection(AccelerationLocomotionAngle, AccelerationLocomotionDirection);
 
 		GetCharacterPivotDistance();
+
+		UpdateRootYawOffset(DeltaSeconds);
 	}
 }
 
@@ -92,7 +94,7 @@ void ULyraAnimInstance::UpdateLocomotionDirection(const float Angle, ELocomotion
 
 void ULyraAnimInstance::CalculateLeanAngle(float DeltaSeconds)
 {
-	float DeltaYaw = CurrentCharacterYaw - LastCharacterYaw;
+	DeltaYaw = CurrentCharacterYaw - LastCharacterYaw;
 	if(VelocityLocomotionDirection == ELocomotionDirection::ELD_Backward)
 	{
 		DeltaYaw *= -1;
@@ -132,4 +134,33 @@ void ULyraAnimInstance::GetCharacterPivotDistance()
 	{
 		PivotDistance = ICharacterInterface::Execute_PredictCharacterPivotDistance(PawnOwner);
 	}
+}
+
+void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
+{
+	if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_Accumulate)
+	{
+		RootYawOffset = FMath::UnwindDegrees(RootYawOffset - DeltaYaw);
+	}
+	else if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_BlendOut)
+	{
+		// 确保 SpringMass 不为零，避免除零错误
+		float UndampedFrequency = 0.0f;
+		if (SpringMass > KINDA_SMALL_NUMBER) 
+		{
+			UndampedFrequency = FMath::Sqrt(SpringStiffness / SpringMass);
+		}
+		FMath::SpringDamper(
+			RootYawOffset,           // InOutValue - 会被修改
+			RootYawOffsetVelocity,   // InOutValueRate - 会被修改，并保持状态
+			TargetRootYawOffset,     // InTargetValue - 通常设为 0.0f 进行淡出
+			0.f,  // InTargetValueRate - 目标速度，通常为 0.0f
+			DeltaTime,               // InDeltaTime
+			UndampedFrequency,       // InUndampedFrequency
+			SpringDampingFactor      // InDampingRatio
+		);
+	}
+
+	RootYawOffsetMode = ERootYawOffsetMode::ERYOM_BlendOut;
+
 }

@@ -56,6 +56,7 @@ private:
 	void CalculateLeanAngle(float DeltaSeconds);
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float LeanAngle = 0.f;
+	float DeltaYaw = 0.f;
 
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	bool bIsCharacterAccelerating = false;
@@ -87,4 +88,15 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float PivotDistance = 0.f;
 	void GetCharacterPivotDistance();
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float RootYawOffset = 0.f;
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	ERootYawOffsetMode RootYawOffsetMode = ERootYawOffsetMode::ERYOM_Accumulate;
+	void UpdateRootYawOffset(float DeltaTime);
+	float TargetRootYawOffset = 0.0f;
+	float RootYawOffsetVelocity = 0.0f;
+	float SpringStiffness = 30.0f;
+	float SpringDampingFactor = 1.0f;
+	float SpringMass = 1.0f; 
 };

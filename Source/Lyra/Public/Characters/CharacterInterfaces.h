@@ -96,4 +96,6 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	float PredictCharacterPivotDistance() const;
+
+	
 };

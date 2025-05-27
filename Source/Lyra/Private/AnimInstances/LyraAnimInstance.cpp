@@ -51,7 +51,15 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		GetCharacterPivotDistance();
 
+		
 		UpdateRootYawOffset(DeltaSeconds);
+
+		VelocityLocomotionAngleWithOffset = FMath::UnwindDegrees(VelocityLocomotionAngle - RootYawOffset);
+
+		bShouldTurnLeft = RootYawOffset > 0.f;
+
+		/*UE_LOG(LogTemp, Warning, TEXT("Init class: %s"), *GetClass()->GetName());
+		UE_LOG(LogTemp, Log, TEXT("%f"), RootYawOffset);*/
 	}
 }
 
@@ -138,7 +146,7 @@ void ULyraAnimInstance::GetCharacterPivotDistance()
 
 void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
 {
-	if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_Accumulate)
+	if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_Accumulate && !bDebug)
 	{
 		RootYawOffset = FMath::UnwindDegrees(RootYawOffset - DeltaYaw);
 	}
@@ -160,7 +168,4 @@ void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
 			SpringDampingFactor      // InDampingRatio
 		);
 	}
-
-	RootYawOffsetMode = ERootYawOffsetMode::ERYOM_BlendOut;
-
 }

@@ -89,7 +89,7 @@ private:
 	float PivotDistance = 0.f;
 	void GetCharacterPivotDistance();
 
-	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	float RootYawOffset = 0.f;
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	ERootYawOffsetMode RootYawOffsetMode = ERootYawOffsetMode::ERYOM_Accumulate;
@@ -98,5 +98,14 @@ private:
 	float RootYawOffsetVelocity = 0.0f;
 	float SpringStiffness = 30.0f;
 	float SpringDampingFactor = 1.0f;
-	float SpringMass = 1.0f; 
+	float SpringMass = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float VelocityLocomotionAngleWithOffset = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bShouldTurnLeft = false;
+
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	bool bDebug = false;
 };

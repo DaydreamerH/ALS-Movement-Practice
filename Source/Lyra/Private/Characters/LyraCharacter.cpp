@@ -35,7 +35,15 @@ ALyraCharacter::ALyraCharacter()
 	WalkingGateSettings.MaxAcceleration = 250.f;
 	WalkingGateSettings.BrakingDeceleration = 250.f;
 	WalkingGateSettings.BrakingFrictionFactor = 1.f;
+	WalkingGateSettings.BrakingFriction = 0.f;
 	WalkingGateSettings.UseSeparateBrakingFriction = true;
+
+	CrouchingGateSettings.MaxWalkSpeed = 250.f;
+	CrouchingGateSettings.MaxAcceleration = 250.f;
+	CrouchingGateSettings.BrakingDeceleration = 250.f;
+	CrouchingGateSettings.BrakingFrictionFactor = 1.f;
+	CrouchingGateSettings.BrakingFriction = 0.f;
+	CrouchingGateSettings.UseSeparateBrakingFriction = true;
 }
 
 void ALyraCharacter::BeginPlay()
@@ -99,6 +107,10 @@ void ALyraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 			EnhancedInput->BindAction(AimAction, ETriggerEvent::Started, this, &ThisClass::OnAction_StartAim);
 			EnhancedInput->BindAction(AimAction, ETriggerEvent::Completed, this, &ThisClass::OnAction_EndAim);
 		}
+		if(CrouchAction)
+		{
+			EnhancedInput->BindAction(CrouchAction, ETriggerEvent::Started, this, &ThisClass::OnAction_Crouch);
+		}
 	}
 }
 
@@ -142,7 +154,7 @@ void ALyraCharacter::OnAction_Move(const FInputActionValue& InputActionValue)
 		const FRotator YawRotation(0.0f, Controller->GetControlRotation().Yaw, 0.0f);
 	
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		const FVector RightDirection   = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	
 		AddMovementInput(ForwardDirection, MoveValue.Y);
 		AddMovementInput(RightDirection, MoveValue.X);
@@ -157,6 +169,20 @@ void ALyraCharacter::OnAction_StartAim(const FInputActionValue& InputActionValue
 void ALyraCharacter::OnAction_EndAim(const FInputActionValue& InputActionValue)
 {
 	UpdateGate(ECharacterGate::ECG_Jogging);
+}
+
+void ALyraCharacter::OnAction_Crouch(const FInputActionValue& InputActionValue)
+{
+	if(CurrentGate == ECharacterGate::ECG_Crouching)
+	{
+		UnCrouch();
+		UpdateGate(ECharacterGate::ECG_Jogging);
+	}
+	else
+	{
+		Crouch();
+		UpdateGate(ECharacterGate::ECG_Crouching);
+	}
 }
 
 
@@ -184,6 +210,16 @@ void ALyraCharacter::UpdateGate(ECharacterGate Gate)
 			GetCharacterMovement()->BrakingDecelerationWalking = WalkingGateSettings.BrakingDeceleration;
 			GetCharacterMovement()->BrakingFriction = WalkingGateSettings.BrakingFriction;
 			GetCharacterMovement()->bUseSeparateBrakingFriction = WalkingGateSettings.UseSeparateBrakingFriction;
+		}
+		break;
+	case ECharacterGate::ECG_Crouching:
+		if(GetCharacterMovement())
+		{
+			GetCharacterMovement()->MaxWalkSpeed = CrouchingGateSettings.MaxWalkSpeed;
+			GetCharacterMovement()->MaxAcceleration = CrouchingGateSettings.MaxAcceleration;
+			GetCharacterMovement()->BrakingDecelerationWalking = CrouchingGateSettings.BrakingDeceleration;
+			GetCharacterMovement()->BrakingFriction = CrouchingGateSettings.BrakingFriction;
+			GetCharacterMovement()->bUseSeparateBrakingFriction = CrouchingGateSettings.UseSeparateBrakingFriction;
 		}
 		break;
 	default:

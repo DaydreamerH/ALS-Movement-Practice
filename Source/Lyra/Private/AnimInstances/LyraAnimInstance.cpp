@@ -23,8 +23,8 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FRotator CharacterRotation = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner);
 		
 		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
-		CharacterLastGate = CharacterCurrentGate;
-		CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
+
+		UpdateCharacterGate();
 		
 		
 		VelocityLocomotionAngle = UKismetAnimationLibrary::CalculateDirection({HorizontalVelocity.X, HorizontalVelocity.Y,0.f}, CharacterRotation);
@@ -61,6 +61,15 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		/*UE_LOG(LogTemp, Warning, TEXT("Init class: %s"), *GetClass()->GetName());
 		UE_LOG(LogTemp, Log, TEXT("%f"), RootYawOffset);*/
 	}
+}
+
+void ULyraAnimInstance::UpdateCharacterGate()
+{
+	CharacterLastGate = CharacterCurrentGate;
+	CharacterCurrentGate = ICharacterInterface::Execute_GetCharacterCurrentGate(PawnOwner);
+	bIsCrouching = CharacterCurrentGate == ECharacterGate::ECG_Crouching;
+	bLastFrameIsCrouching = CharacterLastGate == ECharacterGate::ECG_Crouching;
+	bCrouchStateChanged = bIsCrouching != bLastFrameIsCrouching;
 }
 
 void ULyraAnimInstance::UpdateLocomotionDirection(const float Angle, ELocomotionDirection& Direction)
@@ -146,7 +155,7 @@ void ULyraAnimInstance::GetCharacterPivotDistance()
 
 void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
 {
-	if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_Accumulate && !bDebug)
+	if(RootYawOffsetMode == ERootYawOffsetMode::ERYOM_Accumulate)
 	{
 		RootYawOffset = FMath::UnwindDegrees(RootYawOffset - DeltaYaw);
 	}

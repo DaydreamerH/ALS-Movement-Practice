@@ -19,6 +19,7 @@ enum class ECharacterGate : uint8
 {
 	ECG_Walking UMETA(DisplayName="Walking"),
 	ECG_Jogging UMETA(DisplayName="Jogging"),
+	ECG_Crouching UMETA(DisaplayName="Crouching"),
 
 	ECG_MAX UMETA(DisplayName="DefaultMax")
 };

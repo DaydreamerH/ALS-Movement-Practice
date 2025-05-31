@@ -37,6 +37,7 @@ private:
 	ECharacterGate CharacterCurrentGate;
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	ECharacterGate CharacterLastGate;
+	void UpdateCharacterGate();
 	
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float VelocityLocomotionAngle = 0.f;
@@ -106,6 +107,10 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	bool bShouldTurnLeft = false;
 
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsCrouching = false;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bLastFrameIsCrouching = false;
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
-	bool bDebug = false;
+	bool bCrouchStateChanged = false;
 };

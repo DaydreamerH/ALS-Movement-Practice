@@ -53,6 +53,11 @@ public:
 	UFUNCTION()
 	void OnAction_EndAim(const FInputActionValue& InputActionValue);
 
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* CrouchAction;
+	UFUNCTION()
+	void OnAction_Crouch(const FInputActionValue& InputActionValue);
+
 
 	
 	/** Anim Layers **/
@@ -81,6 +86,7 @@ private:
 	ECharacterGate CurrentGate = ECharacterGate::ECG_Jogging;
 	FGateSettings WalkingGateSettings;
 	FGateSettings JoggingGateSettings;
+	FGateSettings CrouchingGateSettings;
 	void UpdateGate(ECharacterGate Gate);
 	
 

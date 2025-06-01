@@ -13,12 +13,12 @@ void ULayerAnimInstance::SetCharacterCurrentGate_Implementation(ECharacterGate G
 
 void ULayerAnimInstance::SetHorizontalAcceleration_Implementation(FVector2D Acceleration)
 {
-	this->HorizontalAcceleration = HorizontalAcceleration;
+	HorizontalAcceleration = Acceleration;
 }
 
 void ULayerAnimInstance::SetHorizontalVelocity_Implementation(FVector2D Velocity)
 {
-	this->HorizontalVelocity = HorizontalVelocity;
+	HorizontalVelocity = Velocity;
 }
 
 void ULayerAnimInstance::SetIsCrouching_Implementation(bool bCrouch)

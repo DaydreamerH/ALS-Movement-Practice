@@ -23,14 +23,15 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FRotator CharacterRotation = ICharacterInterface::Execute_GetCharacterRotation(PawnOwner);
 		
 		HorizontalVelocity = ICharacterInterface::Execute_GetCharacterHorizontalVelocity(PawnOwner);
-
+		
 		UpdateCharacterGate();
 		
 		
 		VelocityLocomotionAngle = UKismetAnimationLibrary::CalculateDirection({HorizontalVelocity.X, HorizontalVelocity.Y,0.f}, CharacterRotation);
 		LastVelocityLocomotionDirection = VelocityLocomotionDirection;
 		UpdateLocomotionDirection(VelocityLocomotionAngle, VelocityLocomotionDirection);
-
+		UE_LOG(LogTemp, Log, TEXT("%f, %f"), HorizontalVelocity.X, HorizontalVelocity.Y);
+		UE_LOG(LogTemp, Log, TEXT("Direction: %s"), *UEnum::GetValueAsString(VelocityLocomotionDirection));
 		LastCharacterYaw = CurrentCharacterYaw;
 		CurrentCharacterYaw = CharacterRotation.Yaw;
 		CalculateLeanAngle(DeltaSeconds);

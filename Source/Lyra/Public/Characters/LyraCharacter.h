@@ -92,7 +92,7 @@ private:
 
 public:
 	virtual EGuns GetEquippedGunType_Implementation() const override;
-	virtual FVector2D GetCharacterHorizontalVelocity_Implementation() const override;
+	virtual FVector2d GetCharacterHorizontalVelocity_Implementation() const override;
 	virtual ECharacterGate GetCharacterCurrentGate_Implementation() const override;
 	virtual FRotator GetCharacterRotation_Implementation() const override;
 	virtual float GetCharacterOrientationData_Implementation() const override;

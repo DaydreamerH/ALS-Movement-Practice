@@ -235,9 +235,9 @@ EGuns ALyraCharacter::GetEquippedGunType_Implementation() const
 	return EquippedGunType;
 }
 
-FVector2D ALyraCharacter::GetCharacterHorizontalVelocity_Implementation() const
+FVector2d ALyraCharacter::GetCharacterHorizontalVelocity_Implementation() const
 {
-	const FVector2D HorizontalVelocity = {GetVelocity().X, GetVelocity().Y};
+	const FVector2d HorizontalVelocity = {GetVelocity().X, GetVelocity().Y};
 	return HorizontalVelocity;
 }
 

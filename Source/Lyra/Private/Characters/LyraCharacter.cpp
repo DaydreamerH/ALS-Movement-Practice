@@ -12,6 +12,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "AnimCharacterMovementLibrary.h"
+#include "AnimInstances/LayerAnimInstance.h"
 
 ALyraCharacter::ALyraCharacter()
 {
@@ -303,6 +304,17 @@ float ALyraCharacter::PredictCharacterPivotDistance_Implementation() const
 	
 	return PivotLocation.Size();
 }
+
+USkeletalMeshComponent* ALyraCharacter::GetMeshComponent_Implementation() const
+{
+	return GetMesh();
+}
+
+ULayerAnimInstance* ALyraCharacter::GetCurrentLinkedAnimInstance_Implementation() const
+{
+	return Cast<ULayerAnimInstance>(GetMesh()->GetLinkedAnimLayerInstanceByClass(AnimUnarmed));
+}
+
 
 
 

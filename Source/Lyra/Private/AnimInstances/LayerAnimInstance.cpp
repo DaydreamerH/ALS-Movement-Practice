@@ -1,0 +1,82 @@
+#include "AnimInstances/LayerAnimInstance.h"
+
+
+void ULayerAnimInstance::SetDirection_Implementation(ELocomotionDirection Direction)
+{
+	VelocityLocomotionDirection = Direction;
+}
+
+void ULayerAnimInstance::SetCharacterCurrentGate_Implementation(ECharacterGate Gate)
+{
+	CharacterCurrentGate = Gate;
+}
+
+void ULayerAnimInstance::SetHorizontalAcceleration_Implementation(FVector2D Acceleration)
+{
+	this->HorizontalAcceleration = HorizontalAcceleration;
+}
+
+void ULayerAnimInstance::SetHorizontalVelocity_Implementation(FVector2D Velocity)
+{
+	this->HorizontalVelocity = HorizontalVelocity;
+}
+
+void ULayerAnimInstance::SetIsCrouching_Implementation(bool bCrouch)
+{
+	bIsCrouching = bCrouch;
+}
+
+void ULayerAnimInstance::SetPivotDistance_Implementation(float Distance)
+{
+	PivotDistance = Distance;
+}
+
+void ULayerAnimInstance::SetStopDistance_Implementation(float Distance)
+{
+	StopDistance = Distance;
+}
+
+void ULayerAnimInstance::SetCharacterDeltaLocation_Implementation(float Location)
+{
+	CharacterDeltaLocation = Location;
+}
+
+void ULayerAnimInstance::SetRootYawOffset_Implementation(float Offset)
+{
+	RootYawOffset = Offset;
+}
+
+void ULayerAnimInstance::SetShouldTurnLeft_Implementation(bool Left)
+{
+	bShouldTurnLeft = Left;
+}
+
+void ULayerAnimInstance::SetAccelerationLocomotionDirection_Implementation(ELocomotionDirection Direction)
+{
+	AccelerationLocomotionDirection = Direction;
+}
+
+void ULayerAnimInstance::SetCrouchStateChanged_Implementation(bool Change)
+{
+	bCrouchStateChanged = Change;
+}
+
+void ULayerAnimInstance::SetLeanAngle_Implementation(float Angle)
+{
+	LeanAngle = Angle;
+}
+
+void ULayerAnimInstance::SetAccelerationLocomotionAngle_Implementation(float Angle)
+{
+	AccelerationLocomotionAngle = Angle;
+}
+
+void ULayerAnimInstance::SetVelocityLocomotionAngle_Implementation(float Angle)
+{
+	VelocityLocomotionAngle = Angle;
+}
+
+void ULayerAnimInstance::SetVelocityLocomotionAngleWithOffset_Implementation(float Angle)
+{
+	VelocityLocomotionAngleWithOffset = Angle;
+}

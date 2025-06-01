@@ -102,4 +102,6 @@ public:
 	virtual float GetCharacterMaxWalkSpeed_Implementation() const override;
 	virtual FVector GetCharacterLocation_Implementation() const override;
 	virtual float PredictCharacterPivotDistance_Implementation() const override;
+	virtual USkeletalMeshComponent* GetMeshComponent_Implementation() const override;
+	virtual ULayerAnimInstance* GetCurrentLinkedAnimInstance_Implementation() const override;
 };

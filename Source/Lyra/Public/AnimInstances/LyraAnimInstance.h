@@ -26,7 +26,10 @@ public:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 private:
-	UPROPERTY()
+	void UpdateLayerData();
+
+	
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	APawn* PawnOwner = nullptr;
 	
 	/** 角色信息 **/

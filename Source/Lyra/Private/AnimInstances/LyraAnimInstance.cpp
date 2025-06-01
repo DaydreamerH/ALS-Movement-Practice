@@ -4,6 +4,7 @@
 #include "AnimInstances/LyraAnimInstance.h"
 
 #include "KismetAnimationLibrary.h"
+#include "AnimInstances/LayerAnimInstance.h"
 #include "Characters/LyraCharacter.h"
 
 void ULyraAnimInstance::NativeInitializeAnimation()
@@ -30,8 +31,7 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		VelocityLocomotionAngle = UKismetAnimationLibrary::CalculateDirection({HorizontalVelocity.X, HorizontalVelocity.Y,0.f}, CharacterRotation);
 		LastVelocityLocomotionDirection = VelocityLocomotionDirection;
 		UpdateLocomotionDirection(VelocityLocomotionAngle, VelocityLocomotionDirection);
-		UE_LOG(LogTemp, Log, TEXT("%f, %f"), HorizontalVelocity.X, HorizontalVelocity.Y);
-		UE_LOG(LogTemp, Log, TEXT("Direction: %s"), *UEnum::GetValueAsString(VelocityLocomotionDirection));
+		
 		LastCharacterYaw = CurrentCharacterYaw;
 		CurrentCharacterYaw = CharacterRotation.Yaw;
 		CalculateLeanAngle(DeltaSeconds);
@@ -61,6 +61,7 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		/*UE_LOG(LogTemp, Warning, TEXT("Init class: %s"), *GetClass()->GetName());
 		UE_LOG(LogTemp, Log, TEXT("%f"), RootYawOffset);*/
+		UpdateLayerData();
 	}
 }
 
@@ -177,5 +178,34 @@ void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
 			UndampedFrequency,       // InUndampedFrequency
 			SpringDampingFactor      // InDampingRatio
 		);
+	}
+}
+
+
+void ULyraAnimInstance::UpdateLayerData()
+{
+	if(ULayerAnimInstance* LayerAnimInstance = ICharacterInterface::Execute_GetCurrentLinkedAnimInstance(PawnOwner);
+		LayerAnimInstance && LayerAnimInstance->Implements<ULayerInterface>())
+	{
+		ILayerInterface::Execute_SetDirection(LayerAnimInstance, VelocityLocomotionDirection);
+		ILayerInterface::Execute_SetHorizontalAcceleration(LayerAnimInstance, HorizontalAcceleration);
+		ILayerInterface::Execute_SetHorizontalVelocity(LayerAnimInstance, HorizontalVelocity);
+		ILayerInterface::Execute_SetIsCrouching(LayerAnimInstance, bIsCrouching);
+		ILayerInterface::Execute_SetPivotDistance(LayerAnimInstance, PivotDistance);
+		ILayerInterface::Execute_SetStopDistance(LayerAnimInstance, StopDistance);
+		ILayerInterface::Execute_SetCharacterCurrentGate(LayerAnimInstance, CharacterCurrentGate);
+		ILayerInterface::Execute_SetCharacterDeltaLocation(LayerAnimInstance, CharacterDeltaLocation);
+		ILayerInterface::Execute_SetRootYawOffset(LayerAnimInstance, RootYawOffset);
+		ILayerInterface::Execute_SetShouldTurnLeft(LayerAnimInstance, bShouldTurnLeft);
+		ILayerInterface::Execute_SetAccelerationLocomotionDirection(LayerAnimInstance, AccelerationLocomotionDirection);
+		ILayerInterface::Execute_SetAccelerationLocomotionAngle(LayerAnimInstance, AccelerationLocomotionAngle);
+		ILayerInterface::Execute_SetVelocityLocomotionAngle(LayerAnimInstance, VelocityLocomotionAngle);
+		ILayerInterface::Execute_SetCrouchStateChanged(LayerAnimInstance, bCrouchStateChanged);
+		ILayerInterface::Execute_SetLeanAngle(LayerAnimInstance, LeanAngle);
+		ILayerInterface::Execute_SetVelocityLocomotionAngleWithOffset(LayerAnimInstance, VelocityLocomotionAngleWithOffset);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("failed"));
 	}
 }

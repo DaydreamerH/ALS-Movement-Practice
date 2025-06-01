@@ -4,6 +4,8 @@
 #include "UObject/Interface.h"
 #include "CharacterInterfaces.generated.h"
 
+class ULayerAnimInstance;
+
 UENUM(BlueprintType)
 enum class EGuns : uint8
 {
@@ -98,5 +100,9 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = "Character")
 	float PredictCharacterPivotDistance() const;
 
-	
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	USkeletalMeshComponent* GetMeshComponent() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	ULayerAnimInstance* GetCurrentLinkedAnimInstance() const;
 };

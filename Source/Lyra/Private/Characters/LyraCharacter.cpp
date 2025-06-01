@@ -54,6 +54,7 @@ void ALyraCharacter::BeginPlay()
 	if(GetMesh() && AnimUnarmed)
 	{
 		GetMesh()->LinkAnimClassLayers(AnimUnarmed);
+		CurrentLinkedAnimLayer = AnimUnarmed;
 	}
 	UpdateGate(ECharacterGate::ECG_Jogging);
 	
@@ -124,6 +125,7 @@ void ALyraCharacter::OnAction_SwitchWeapons(const FInputActionValue& InputAction
 		if(GetMesh() && AnimRifle)
 		{
 			GetMesh()->LinkAnimClassLayers(AnimRifle);
+			CurrentLinkedAnimLayer = AnimRifle;
 		}
 		break;
 	case 2:
@@ -131,6 +133,7 @@ void ALyraCharacter::OnAction_SwitchWeapons(const FInputActionValue& InputAction
 		if(GetMesh() && AnimPistol)
 		{
 			GetMesh()->LinkAnimClassLayers(AnimPistol);
+			CurrentLinkedAnimLayer = AnimPistol;
 		}
 		break;
 	default:
@@ -312,7 +315,7 @@ USkeletalMeshComponent* ALyraCharacter::GetMeshComponent_Implementation() const
 
 ULayerAnimInstance* ALyraCharacter::GetCurrentLinkedAnimInstance_Implementation() const
 {
-	return Cast<ULayerAnimInstance>(GetMesh()->GetLinkedAnimLayerInstanceByClass(AnimUnarmed));
+	return Cast<ULayerAnimInstance>(GetMesh()->GetLinkedAnimLayerInstanceByClass(CurrentLinkedAnimLayer));
 }
 
 

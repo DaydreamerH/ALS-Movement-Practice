@@ -69,6 +69,8 @@ public:
 	TSubclassOf<UAnimInstance> AnimRifle;
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAnimInstance> AnimUnarmed;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UAnimInstance> CurrentLinkedAnimLayer;
 	
 private:
 	UPROPERTY(VisibleAnywhere, Category = Camera)

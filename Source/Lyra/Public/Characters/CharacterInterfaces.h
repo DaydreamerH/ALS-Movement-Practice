@@ -105,4 +105,16 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
 	ULayerAnimInstance* GetCurrentLinkedAnimInstance() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	bool IsInAir() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	float VerticalVelocity();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	float GetGravityZ() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	float GetGroundDistance() const;
 };

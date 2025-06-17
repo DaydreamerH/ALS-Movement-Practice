@@ -61,7 +61,22 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		/*UE_LOG(LogTemp, Warning, TEXT("Init class: %s"), *GetClass()->GetName());
 		UE_LOG(LogTemp, Log, TEXT("%f"), RootYawOffset);*/
+
+		UpdateJumpState();
+		
+		
 		UpdateLayerData();
+
+		GroundDistance = ICharacterInterface::Execute_GetGroundDistance(PawnOwner);
+
+		if(bIsFalling)
+		{
+			FallingTime += DeltaSeconds;
+		}
+		else if(bIsJumping)
+		{
+			FallingTime = 0.f;
+		}
 	}
 }
 
@@ -181,6 +196,21 @@ void ULyraAnimInstance::UpdateRootYawOffset(float DeltaTime)
 	}
 }
 
+void ULyraAnimInstance::UpdateJumpState()
+{
+	bIsInAir = ICharacterInterface::Execute_IsInAir(PawnOwner);
+	float VelocityZ = ICharacterInterface::Execute_VerticalVelocity(PawnOwner);
+	bool UpState = VelocityZ > 0.f;
+	bIsFalling = !UpState && bIsInAir;
+	bIsJumping = UpState && bIsInAir;
+	float GravityZ = ICharacterInterface::Execute_GetGravityZ(PawnOwner);
+	if(bIsInAir)
+	{
+		TimeToJumpApex = VelocityZ / GravityZ;
+		UE_LOG(LogTemp, Log, TEXT("%f"), TimeToJumpApex);
+	}
+}
+
 
 void ULyraAnimInstance::UpdateLayerData()
 {
@@ -203,6 +233,8 @@ void ULyraAnimInstance::UpdateLayerData()
 		ILayerInterface::Execute_SetCrouchStateChanged(LayerAnimInstance, bCrouchStateChanged);
 		ILayerInterface::Execute_SetLeanAngle(LayerAnimInstance, LeanAngle);
 		ILayerInterface::Execute_SetVelocityLocomotionAngleWithOffset(LayerAnimInstance, VelocityLocomotionAngleWithOffset);
+		ILayerInterface::Execute_SetGroundDistance(LayerAnimInstance, GroundDistance);
+		ILayerInterface::Execute_SetIsInAir(LayerAnimInstance, bIsInAir);
 	}
 	else
 	{

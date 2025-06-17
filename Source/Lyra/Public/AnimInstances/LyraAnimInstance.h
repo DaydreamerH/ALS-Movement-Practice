@@ -116,4 +116,20 @@ private:
 	bool bLastFrameIsCrouching = false;
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	bool bCrouchStateChanged = false;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsJumping = false;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsFalling = false;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsInAir = false;
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float TimeToJumpApex = 0.f;
+	void UpdateJumpState();
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float GroundDistance = 0.f;
+
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	float FallingTime = 0.f;
 };

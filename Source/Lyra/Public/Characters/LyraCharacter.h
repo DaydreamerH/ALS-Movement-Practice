@@ -58,7 +58,11 @@ public:
 	UFUNCTION()
 	void OnAction_Crouch(const FInputActionValue& InputActionValue);
 
-
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* JumpAction;
+	UFUNCTION()
+	void OnAction_Jump(const FInputActionValue& InputActionValue);
+	
 	
 	/** Anim Layers **/
 	UPROPERTY(EditAnywhere)
@@ -91,7 +95,9 @@ private:
 	FGateSettings CrouchingGateSettings;
 	void UpdateGate(ECharacterGate Gate);
 	
-
+	float GroundDistance = 0.f;
+	void UpdateGroundDistance();
+	
 public:
 	virtual EGuns GetEquippedGunType_Implementation() const override;
 	virtual FVector2d GetCharacterHorizontalVelocity_Implementation() const override;
@@ -106,4 +112,8 @@ public:
 	virtual float PredictCharacterPivotDistance_Implementation() const override;
 	virtual USkeletalMeshComponent* GetMeshComponent_Implementation() const override;
 	virtual ULayerAnimInstance* GetCurrentLinkedAnimInstance_Implementation() const override;
+	virtual bool IsInAir_Implementation() const override;
+	virtual float VerticalVelocity_Implementation() override;
+	virtual float GetGravityZ_Implementation() const override;
+	virtual float GetGroundDistance_Implementation() const override;
 };

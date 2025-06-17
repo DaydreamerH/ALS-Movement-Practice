@@ -64,4 +64,13 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SetVelocityLocomotionAngleWithOffset(float Angle);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetGroundDistance(float GD);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetIsInAir(bool Air);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetFallingTime(float FallingTime);
 };

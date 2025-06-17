@@ -64,6 +64,15 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float VelocityLocomotionAngleWithOffset;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float GroundDistance;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	bool bIsInAir;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float FallingTime = 0.f;
 	
 public:
 	virtual void SetDirection_Implementation(ELocomotionDirection Direction) override;
@@ -82,4 +91,7 @@ public:
 	virtual void SetAccelerationLocomotionAngle_Implementation(float Angle) override;
 	virtual void SetVelocityLocomotionAngle_Implementation(float Angle) override;
 	virtual void SetVelocityLocomotionAngleWithOffset_Implementation(float Angle) override;
+	virtual void SetGroundDistance_Implementation(float GD) override;
+	virtual void SetIsInAir_Implementation(bool Air) override;
+	virtual void SetFallingTime_Implementation(float fallingTime) override;
 };

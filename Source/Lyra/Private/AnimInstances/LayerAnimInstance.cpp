@@ -80,3 +80,18 @@ void ULayerAnimInstance::SetVelocityLocomotionAngleWithOffset_Implementation(flo
 {
 	VelocityLocomotionAngleWithOffset = Angle;
 }
+
+void ULayerAnimInstance::SetGroundDistance_Implementation(float GD)
+{
+	GroundDistance = GD;
+}
+
+void ULayerAnimInstance::SetIsInAir_Implementation(bool Air)
+{
+	bIsInAir = Air;
+}
+
+void ULayerAnimInstance::SetFallingTime_Implementation(float fallingTime)
+{
+	FallingTime = fallingTime;
+}

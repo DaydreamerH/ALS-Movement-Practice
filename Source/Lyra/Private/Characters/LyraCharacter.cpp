@@ -13,6 +13,8 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "AnimCharacterMovementLibrary.h"
 #include "AnimInstances/LayerAnimInstance.h"
+#include "Components/CapsuleComponent.h"
+#include "Kismet/KismetSystemLibrary.h"
 
 ALyraCharacter::ALyraCharacter()
 {
@@ -64,6 +66,7 @@ void ALyraCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	UpdateGroundDistance();
 }
 
 
@@ -112,6 +115,10 @@ void ALyraCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		if(CrouchAction)
 		{
 			EnhancedInput->BindAction(CrouchAction, ETriggerEvent::Started, this, &ThisClass::OnAction_Crouch);
+		}
+		if(JumpAction)
+		{
+			EnhancedInput->BindAction(JumpAction, ETriggerEvent::Started, this, &ThisClass::OnAction_Jump);
 		}
 	}
 }
@@ -189,6 +196,11 @@ void ALyraCharacter::OnAction_Crouch(const FInputActionValue& InputActionValue)
 	}
 }
 
+void ALyraCharacter::OnAction_Jump(const FInputActionValue& InputActionValue)
+{
+	Jump();
+}
+
 
 /** 状态更新 **/
 void ALyraCharacter::UpdateGate(ECharacterGate Gate)
@@ -232,6 +244,33 @@ void ALyraCharacter::UpdateGate(ECharacterGate Gate)
 	
 }
 
+void ALyraCharacter::UpdateGroundDistance()
+{
+	FVector StartLocation = GetActorLocation() - FVector(0.f, 0.f, GetCapsuleComponent()->GetScaledCapsuleHalfHeight());
+	FVector EndLocation = StartLocation - FVector(0.f, 0.f, 1000.f); // 向下 trace 1000
+
+	FHitResult HitResult;
+	TArray<AActor*> ActorsToIgnore;
+	ActorsToIgnore.Add(this);
+
+	bool bHit = UKismetSystemLibrary::SphereTraceSingle(
+		GetWorld(),
+		StartLocation,
+		EndLocation,
+		5.f, 
+		UEngineTypes::ConvertToTraceType(ECC_Visibility), 
+		false, 
+		ActorsToIgnore,
+		EDrawDebugTrace::None, 
+		HitResult,
+		true
+	);
+
+	if (bHit)
+	{
+		GroundDistance = (HitResult.Location - StartLocation).Size();
+	}
+}
 
 /** 接口实现 **/
 EGuns ALyraCharacter::GetEquippedGunType_Implementation() const
@@ -316,6 +355,28 @@ USkeletalMeshComponent* ALyraCharacter::GetMeshComponent_Implementation() const
 ULayerAnimInstance* ALyraCharacter::GetCurrentLinkedAnimInstance_Implementation() const
 {
 	return Cast<ULayerAnimInstance>(GetMesh()->GetLinkedAnimLayerInstanceByClass(CurrentLinkedAnimLayer));
+}
+
+
+bool ALyraCharacter::IsInAir_Implementation() const
+{
+	return GetCharacterMovement()->IsFalling();
+}
+
+float ALyraCharacter::VerticalVelocity_Implementation()
+{
+	return GetVelocity().Z;
+}
+
+
+float ALyraCharacter::GetGravityZ_Implementation() const
+{
+	return GetCharacterMovement()->GetGravityZ();
+}
+
+float ALyraCharacter::GetGroundDistance_Implementation() const
+{
+	return GroundDistance;
 }
 
 

@@ -28,8 +28,8 @@ ALyraCharacter::ALyraCharacter()
 	FollowCamera->SetupAttachment(CameraBoom);
 
 	JoggingGateSettings.MaxWalkSpeed = 800.f;
-	JoggingGateSettings.MaxAcceleration = 800.f;
-	JoggingGateSettings.BrakingDeceleration = 1200.f;
+	JoggingGateSettings.MaxAcceleration = 1200.f;
+	JoggingGateSettings.BrakingDeceleration = 1500.f;
 	JoggingGateSettings.BrakingFrictionFactor = 1.f;
 	JoggingGateSettings.BrakingFriction = 0.f;
 	JoggingGateSettings.UseSeparateBrakingFriction = true;

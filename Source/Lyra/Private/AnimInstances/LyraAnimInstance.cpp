@@ -209,7 +209,6 @@ void ULyraAnimInstance::UpdateJumpState()
 	if(bIsInAir)
 	{
 		TimeToJumpApex = VelocityZ / GravityZ;
-		UE_LOG(LogTemp, Log, TEXT("%f"), TimeToJumpApex);
 	}
 }
 

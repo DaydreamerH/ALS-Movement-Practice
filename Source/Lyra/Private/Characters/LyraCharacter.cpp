@@ -379,6 +379,11 @@ float ALyraCharacter::GetGroundDistance_Implementation() const
 	return GroundDistance;
 }
 
+float ALyraCharacter::GetAimRotationPitch_Implementation() const
+{
+	return GetBaseAimRotation().Pitch;
+}
+
 
 
 

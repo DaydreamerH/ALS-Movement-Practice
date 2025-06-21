@@ -73,7 +73,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float FallingTime = 0.f;
-	
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float Pitch = 0.f;
 public:
 	virtual void SetDirection_Implementation(ELocomotionDirection Direction) override;
 	virtual void SetCharacterCurrentGate_Implementation(ECharacterGate Gate) override;
@@ -94,4 +96,5 @@ public:
 	virtual void SetGroundDistance_Implementation(float GD) override;
 	virtual void SetIsInAir_Implementation(bool Air) override;
 	virtual void SetFallingTime_Implementation(float fallingTime) override;
+	virtual void SetPitch_Implementation(float Pitch) override;
 };

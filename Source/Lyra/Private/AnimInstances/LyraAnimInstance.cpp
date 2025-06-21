@@ -36,6 +36,8 @@ void ULyraAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		CurrentCharacterYaw = CharacterRotation.Yaw;
 		CalculateLeanAngle(DeltaSeconds);
 
+		Pitch = ICharacterInterface::Execute_GetAimRotationPitch(PawnOwner);
+
 		bIsCharacterAccelerating = ICharacterInterface::Execute_IsCharacterAccelerating(PawnOwner);
 		
 		GetCharacterStopDistance();
@@ -235,6 +237,7 @@ void ULyraAnimInstance::UpdateLayerData()
 		ILayerInterface::Execute_SetVelocityLocomotionAngleWithOffset(LayerAnimInstance, VelocityLocomotionAngleWithOffset);
 		ILayerInterface::Execute_SetGroundDistance(LayerAnimInstance, GroundDistance);
 		ILayerInterface::Execute_SetIsInAir(LayerAnimInstance, bIsInAir);
+		ILayerInterface::Execute_SetPitch(LayerAnimInstance, Pitch);
 	}
 	else
 	{

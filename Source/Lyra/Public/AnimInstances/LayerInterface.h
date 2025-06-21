@@ -73,4 +73,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SetFallingTime(float FallingTime);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SetPitch(float Pitch);
 };

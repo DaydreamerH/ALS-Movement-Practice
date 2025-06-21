@@ -132,4 +132,7 @@ private:
 
 	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
 	float FallingTime = 0.f;
+
+	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
+	float Pitch = 0.f;
 };

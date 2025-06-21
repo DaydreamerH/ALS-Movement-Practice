@@ -116,4 +116,5 @@ public:
 	virtual float VerticalVelocity_Implementation() override;
 	virtual float GetGravityZ_Implementation() const override;
 	virtual float GetGroundDistance_Implementation() const override;
+	virtual float GetAimRotationPitch_Implementation() const override;
 };

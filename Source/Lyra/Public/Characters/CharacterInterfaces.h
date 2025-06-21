@@ -117,4 +117,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
 	float GetGroundDistance() const;
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category="Character")
+	float GetAimRotationPitch() const;
 };

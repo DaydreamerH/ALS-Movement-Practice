@@ -95,3 +95,8 @@ void ULayerAnimInstance::SetFallingTime_Implementation(float fallingTime)
 {
 	FallingTime = fallingTime;
 }
+
+void ULayerAnimInstance::SetPitch_Implementation(float P)
+{
+	Pitch = P;
+}

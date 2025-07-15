@@ -76,6 +76,9 @@ private:
 
 	UPROPERTY(BlueprintReadOnly, meta=(AllowPrivateAccess="true"))
 	float Pitch = 0.f;
+
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess="true"))
+	FVector2D PivotHorizontalAcceleration;
 public:
 	virtual void SetDirection_Implementation(ELocomotionDirection Direction) override;
 	virtual void SetCharacterCurrentGate_Implementation(ECharacterGate Gate) override;

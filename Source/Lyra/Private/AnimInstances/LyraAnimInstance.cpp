@@ -105,7 +105,7 @@ void ULyraAnimInstance::UpdateLocomotionDirection(const float Angle, ELocomotion
 		if(Angle<=BackwardMaxBound+DeadZone && Angle>=ForwardMaxBound-DeadZone)return;
 		break;
 	case ELocomotionDirection::ELD_Left:
-		if(Angle>=BackwardMinBound-DeadZone && Angle<=ForwardMinBound-DeadZone)return;
+		if(Angle>=BackwardMinBound-DeadZone && Angle<=ForwardMinBound+DeadZone)return;
 		break;
 	default:
 		break;	
